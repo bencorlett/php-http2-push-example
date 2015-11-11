@@ -1,0 +1,72 @@
+# PHP HTTP/2 Server Push Example
+
+To run this example, you must first install `curl` 7.45.0 with HTTP/2 support.
+
+You can check this with `curl --version`, and make sure `http2` is listed (and that it's >= 7.4.50)
+
+If you use a mac, this can be done wiht homebrew:
+
+```sh
+$ brew install curl --with-nghttp2 --with-openssl
+```
+
+You will also need node/npm:
+
+```sh
+$ brew install node
+```
+
+Once you have this, you will need to compile PHP using the `curl-http2-push` branch in the `dshafik/php-src` fork. First clone the `php/php-src` repo:
+
+```sh
+$ git clone https://github.com/php/php-src.git
+```
+
+Then add the fork, and check out the branch
+
+```sh
+$ git remote add dshafik https://github.com/dshafik/php-src.git
+$ git fetch --all
+$ git checkout dshafik/curl-http2-push
+```
+
+Finally, compile PHP:
+
+```sh
+$ ./buildconf
+$ CFLAGS='-O0 -ggdb3' ./configure --disable-all --with-curl=/usr/local/Cellar/curl/7.45.0 --enable-debug
+$ make -j4
+```
+
+Once you've done this, you can execute `./sapi/cli/php` or `./sapi/phpdbg/phpdbg` with the patch,
+and compiled against the latest libcurl.
+
+Now, run the http2 server:
+
+```sh
+$ cd node-server
+$ npm install
+$ node index.js
+```
+
+In another terminal, test it with `nghttp`:
+
+```sh
+$ nghttp -n --max-concurrent-streams=2 --stat http://127.0.0.1:3000/nghttp
+``` 
+
+Finally, run the PHP script at the root of the checkout:
+
+```sh
+$ php ./push.php
+```
+
+## Expected Behavior:
+It should spit out _at least_ some HTML, but preferably, some HTML and CSS (with the CSS being pushed)
+
+## Actual Behavior
+Nothing. As far as I can tell, the request never hits the HTTP server.
+
+## Other Tests
+
+Try it without setting the version to HTTP/2, and against another HTTP/2 enabled site, e.g. https://http2.akamai.net
