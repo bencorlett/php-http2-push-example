@@ -12,7 +12,7 @@ To run this example, you must first install `curl` 7.45.0 with HTTP/2 support.
 
 You can check this with `curl --version`, and make sure `http2` is listed (and that it's >= 7.4.50)
 
-If you use a mac, this can be done wiht homebrew:
+If you use a mac, this can be done with homebrew:
 
 ```sh
 $ brew install curl --with-nghttp2 --with-openssl
