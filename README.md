@@ -1,5 +1,13 @@
 # PHP HTTP/2 Server Push Example
 
+## What/Why
+
+This is a sample script to test a patch that adds support for curls new HTTP/2 server push support.
+
+It includes these instructions, a simple node.js HTTP/2 server with server push support and an example request (`node-server/index.js`) and the PHP script to test the new features.
+
+## Setup
+
 To run this example, you must first install `curl` 7.45.0 with HTTP/2 support.
 
 You can check this with `curl --version`, and make sure `http2` is listed (and that it's >= 7.4.50)
